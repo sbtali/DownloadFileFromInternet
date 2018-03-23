@@ -12,11 +12,15 @@ import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
+import android.app.DownloadManager
+import android.content.Context
+import android.net.Uri
+import android.os.Environment
 
 class MainActivity : AppCompatActivity() {
 
-    //1.get internet permission
-    //2.
+    //1.get permissions
+    //2.define download function
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +40,8 @@ class MainActivity : AppCompatActivity() {
 
         val button = findViewById<Button>(R.id.button)
         button.setOnClickListener(View.OnClickListener {
-
+            download("http://dl.nex1music.ir/1397/01/03/Amirhossein%20Miri%20-%20Bitabam%20[128].mp3?time=1521806414",
+                    "title", "description", "filename.mp3")
         })
 
     }
@@ -60,11 +65,11 @@ class MainActivity : AppCompatActivity() {
                 val cameraAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED
 
                 if (locationAccepted && cameraAccepted){
-                    Toast.makeText(this, "Permission Granted, Now you can access location data and camera.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Permission Granted, Now you can access", Toast.LENGTH_LONG).show()
                 }
 
                 else {
-                    Toast.makeText(this, "Permission Denied, You cannot access location data and camera.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Permission Denied, You cannot access", Toast.LENGTH_LONG).show()
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                             showMessageOKCancel("You need to allow access to both the permissions",
@@ -101,6 +106,17 @@ class MainActivity : AppCompatActivity() {
         val downloadZipUrl = "http://androhub.com/demo/demo.zip"
         val downloadVideoUrl = "http://androhub.com/demo/demo.mp4"
         val downloadMp3Url = "http://androhub.com/demo/demo.mp3"
+    }
+
+    private fun download(url: String,title: String, description: String, filename: String){
+        val request = DownloadManager.Request(Uri.parse(url))
+        request.setTitle(title)
+        request.setDescription(description)
+        request.allowScanningByMediaScanner()
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename)
+        val manager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        manager.enqueue(request)
     }
 
 }
