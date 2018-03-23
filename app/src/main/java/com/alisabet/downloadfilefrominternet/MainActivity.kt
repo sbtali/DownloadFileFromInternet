@@ -98,16 +98,6 @@ class MainActivity : AppCompatActivity() {
                 .show()
     }
 
-    companion object {
-        val downloadDirectory = "Androhub Downloads"
-        val mainUrl = "http://androhub.com/demo/"
-        val downloadPdfUrl = "http://androhub.com/demo/demo.pdf"
-        val downloadDocUrl = "http://androhub.com/demo/demo.doc"
-        val downloadZipUrl = "http://androhub.com/demo/demo.zip"
-        val downloadVideoUrl = "http://androhub.com/demo/demo.mp4"
-        val downloadMp3Url = "http://androhub.com/demo/demo.mp3"
-    }
-
     private fun download(url: String,title: String, description: String, filename: String){
         val request = DownloadManager.Request(Uri.parse(url))
         request.setTitle(title)
